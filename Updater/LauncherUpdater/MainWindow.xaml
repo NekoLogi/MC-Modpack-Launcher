@@ -1,0 +1,168 @@
+﻿<Window
+    x:Class="LauncherUpdater.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:LauncherUpdater"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MC-Launcher Updater"
+    Width="390"
+    Height="200"
+    ContentRendered="Window_ContentRendered"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Grid Background="#FF0D0069">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Orientation="Vertical">
+            <GroupBox
+                Margin="5,0,5,0"
+                BorderThickness="0.5"
+                FontFamily="Fonts/#Dosis"
+                FontWeight="Medium"
+                Foreground="LightBlue"
+                Header="Versions">
+                <StackPanel Orientation="Horizontal">
+                    <Label
+                        Content="Server Version:"
+                        FontFamily="Fonts/#Dosis"
+                        FontSize="14"
+                        Foreground="LightBlue" />
+                    <Label
+                        Name="Server_Ver"
+                        Content="No Version"
+                        FontFamily="Fonts/#Dosis"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="LightBlue" />
+                    <Label
+                        Content="Client Version:"
+                        FontFamily="Fonts/#Dosis"
+                        FontSize="14"
+                        Foreground="LightBlue" />
+                    <Label
+                        Name="Client_Ver"
+                        Content="No Version"
+                        FontFamily="Fonts/#Dosis"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="LightBlue" />
+                </StackPanel>
+            </GroupBox>
+            <GroupBox
+                Margin="5,0,5,0"
+                BorderThickness="0.5"
+                FontFamily="Fonts/#Dosis"
+                FontWeight="Medium"
+                Foreground="LightBlue"
+                Header="Status">
+                <StackPanel Orientation="Horizontal">
+                    <Label
+                        Content="Server:"
+                        FontFamily="Fonts/#Dosis"
+                        FontSize="14"
+                        Foreground="LightBlue" />
+                    <Label
+                        Name="Server_Status"
+                        Content="Offline"
+                        FontFamily="Fonts/#Dosis"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="LightBlue" />
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <Button
+            Name="Start_Launcher"
+            Grid.Row="2"
+            Grid.Column="1"
+            Width="130"
+            Height="35"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Click="Start_Launcher_Click"
+            Content="Start Launcher"
+            FontFamily="Fonts/#Dosis"
+            FontSize="16"
+            FontWeight="Medium"
+            Foreground="LightBlue">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis" />
+                    <Setter Property="Background" Value="Purple" />
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="DarkViolet" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Width="130"
+                        Height="35"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="5">
+
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button
+            Name="Update_Launcher"
+            Grid.Row="2"
+            Grid.Column="0"
+            Width="130"
+            Height="35"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Click="Update_Launcher_Click"
+            Content="Update"
+            FontFamily="Fonts/#Dosis"
+            FontSize="16"
+            FontWeight="Medium"
+            Foreground="LightBlue">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="TextElement.FontFamily" Value="Fonts/#Dosis" />
+                    <Setter Property="Background" Value="Purple" />
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="DarkViolet" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Width="130"
+                        Height="35"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="5">
+
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+</Window>

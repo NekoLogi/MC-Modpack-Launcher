@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MC-Launcher Server": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
