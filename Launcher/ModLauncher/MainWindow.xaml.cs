@@ -386,7 +386,7 @@ namespace ModLauncher
 
         private void Info_Btn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Created by NekoLogi\nLauncher version: 4.0.0");
+            MessageBox.Show("Created by NekoLogi\nLauncher version: 4.1.0");
         }
 
         private void Delete_Btn_Click(object sender, RoutedEventArgs e)
