@@ -3,7 +3,8 @@
     public class Modpack
     {
         public const string PATH = "modpack.json";
-        public string Name = "Gutes Modpack";
+        public string DisplayName = "Guter Anzeigename";
+        public string Name = "Gutes_Modpack";
         public string Description = "Das ist ein gutes Modpack!";
         public string Version = "N/a";
         public string Log = "";

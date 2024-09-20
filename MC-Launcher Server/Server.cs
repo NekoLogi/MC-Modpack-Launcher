@@ -53,7 +53,6 @@ namespace MC_Launcher_Server
             {
                 Console.WriteLine("modpack.json doesn't exist, edit the newly created one");
                 File.WriteAllText(Modpack.PATH, JsonConvert.SerializeObject(new Modpack(), Formatting.Indented));
-                Console.ReadLine();
                 Environment.Exit(0);
             }
             string json = File.ReadAllText(Modpack.PATH);
@@ -118,7 +117,7 @@ namespace MC_Launcher_Server
 
         private void ModUpdate(Socket client)
         {
-            string path = $"Modpack/{Pack!.Name.Replace(' ', '_')}/{Pack.Name.Replace(' ', '_')}_update.7z";
+            string path = $"Modpack/{Pack!.Name}/{Pack!.Name}.7z";
             Console.WriteLine("{0} requested from {1}", path, client.RemoteEndPoint);
 
             Console.WriteLine("Sending {0} update to {1}", Pack.Name, client.RemoteEndPoint);
@@ -130,7 +129,7 @@ namespace MC_Launcher_Server
 
         private void ModInstall(Socket client)
         {
-            string path = $"Modpack/{Pack!.Name.Replace(' ', '_')}/{Pack.Name.Replace(' ', '_')}.7z";
+            string path = $"Modpack/{Pack!.Name}/{Pack!.Name}.7z";
             Console.WriteLine("{0} requested from {1}", path, client.RemoteEndPoint);
 
             Console.WriteLine("Sending {0} to {1}", Pack.Name, client.RemoteEndPoint);

@@ -8,8 +8,8 @@ namespace ModLauncher
     static class FileManager
     {
         public static Modpack Pack = new Modpack();
-        private static string extractpath = $"Launcher/{FileServer.Pack.Name}";
-        private static string cache = $"Cache/{FileServer.Pack.Name}";
+        private static string extractPath = $"Launcher/";
+        private static string cache = $"Cache/";
 
 
         public static void ModInstall()
@@ -20,9 +20,9 @@ namespace ModLauncher
 
                 using (ArchiveFile archiveFile = new ArchiveFile(zipPath))
                 {
-                    archiveFile.Extract(extractpath, true);
+                    archiveFile.Extract(extractPath, true);
                 }
-                File.Delete($"Cache/{FileServer.Pack.Name.ToLower()}.7z");
+                File.Delete(zipPath);
                 SetVersion();
             } catch (System.Exception err)
             {
@@ -32,20 +32,21 @@ namespace ModLauncher
 
         public static void ModUpdate()
         {
-            const char separator = '';
+            const char separator = '^';
             try
             {
-                if (!File.Exists($"Cache/{FileServer.Pack.Name.ToLower()}_update.7z"))
+                string zipPath = $"Cache/{FileServer.Pack.Name.ToLower()}.7z";
+                if (!File.Exists(zipPath))
                 {
                     MainWindow.CurrentWindow.GetError("Modpack was not found, after downloading from server!");
                     return;
                 }
-                string zipPath = $"Cache/{FileServer.Pack.Name.ToLower()}_update.7z";
 
                 using (ArchiveFile archiveFile = new ArchiveFile(zipPath))
                 {
                     archiveFile.Extract(cache, true);
                 }
+
                 string failedChanges = "";
                 foreach (string item in FileServer.Pack.Actions)
                 {
@@ -53,15 +54,18 @@ namespace ModLauncher
                     switch (steps[0])
                     {
                         case "ADD":
+                            MainWindow.CurrentWindow.ChangeInstallStatus($"Adding {steps[2].Split('/')[1]}...");
                             if (!AddChange(steps[1], steps[2]))
-                                failedChanges += $"- Failed to delete: {(steps[1] == "DIR" ? "DIRECTORY" : "FILE")} {steps[2]}\n";
-                            break;
-                        case "DEL":
-                            if (!RemoveChange(steps[1], steps[2]))
                                 failedChanges += $"- Failed to add: {(steps[1] == "DIR" ? "DIRECTORY" : "FILE")} {steps[2]}\n";
                             break;
+                        case "DEL":
+                            MainWindow.CurrentWindow.ChangeInstallStatus($"Removing {steps[2].Split('/')[1]}...");
+                            if (!RemoveChange(steps[1], steps[2]))
+                                failedChanges += $"- Failed to remove: {(steps[1] == "DIR" ? "DIRECTORY" : "FILE")} {steps[2]}\n";
+                            break;
                         case "MOD":
-                            if ((!RemoveChange(steps[1], steps[2])) || AddChange(steps[1], steps[2]))
+                            MainWindow.CurrentWindow.ChangeInstallStatus($"Changing {steps[2].Split('/')[1]}...");
+                            if ((!RemoveChange(steps[1], steps[2])) || !AddChange(steps[1], steps[2]))
                                 failedChanges += $"- Failed to modify: {(steps[1] == "DIR" ? "DIRECTORY" : "FILE")} {steps[2]} \n";
                             break;
                     }
@@ -69,7 +73,7 @@ namespace ModLauncher
                 if (failedChanges != "")
                     MessageBox.Show("Failed Changes:\n" + failedChanges);
                 File.Delete(zipPath);
-                Directory.Delete(cache, true);
+                Directory.Delete(cache + FileServer.Pack.Name, true);
                 SetVersion();
             } catch (System.Exception err)
             {
@@ -79,18 +83,19 @@ namespace ModLauncher
 
         private static bool RemoveChange(string format, string path)
         {
-            if (!Directory.Exists(extractpath))
-                return false;
-
             try
             {
                 switch (format)
                 {
                     case "DIR":
-                        Directory.Delete(extractpath + "/" + path, true);
+                        if (!Directory.Exists(extractPath + $"{FileServer.Pack.Name}/" + path))
+                            return false;
+                        Directory.Delete(extractPath + $"{FileServer.Pack.Name}/" + path, true);
                         break;
                     case "FILE":
-                        File.Delete(extractpath + "/" + path);
+                        if (!File.Exists(extractPath + $"{FileServer.Pack.Name}/" + path))
+                            return false;
+                        File.Delete(extractPath + $"{FileServer.Pack.Name}/" + path);
                         break;
                 }
                 return true;
@@ -101,18 +106,20 @@ namespace ModLauncher
 
         private static bool AddChange(string format, string path)
         {
-            if (!Directory.Exists(extractpath))
-                return false;
-
             try
             {
+
                 switch (format)
                 {
                     case "DIR":
-                        Directory.Move(cache + "/" + path, extractpath + "/" + path);
+                        if (Directory.Exists(extractPath + $"{FileServer.Pack.Name}/" + path))
+                            return false;
+                        Directory.Move(cache + $"{FileServer.Pack.Name}/" + path, extractPath + $"{FileServer.Pack.Name}/" + path);
                         break;
                     case "FILE":
-                        File.Move(cache + "/" + path, extractpath + "/" + path);
+                        if (File.Exists(extractPath + $"{FileServer.Pack.Name}/" + path))
+                            return false;
+                        File.Move(cache + $"{FileServer.Pack.Name}/" + path, extractPath + $"{FileServer.Pack.Name}/" + path);
                         break;
                 }
                 return true;

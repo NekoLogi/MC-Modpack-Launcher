@@ -50,7 +50,7 @@ namespace ModLauncher
                 process.Start();
             } catch (Exception)
             {
-                main.GetError($"Failed Launching {FileManager.Pack.Name}!");
+                main.GetError($"Failed Launching {FileManager.Pack.DisplayName}!");
             }
         }
     }
