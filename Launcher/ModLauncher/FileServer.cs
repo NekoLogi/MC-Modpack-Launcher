@@ -89,8 +89,8 @@ namespace ModLauncher
             if (Directory.Exists($"Launcher/{Pack.Name}"))
                 Directory.Delete($"Launcher/{Pack.Name}", true);
 
-            MainWindow.CurrentWindow.ChangeInstallStatus($"Downloading modpack: {Pack.Name}...");
-            DownloadFile(0);
+            MainWindow.CurrentWindow.ChangeInstallStatus($"Downloading modpack: {Pack.DisplayName}...");
+            DownloadFile();
             MainWindow.CurrentWindow.ChangeInstallStatus($"Generating checksum...");
             GenerateHash($"Cache/{Pack.Name.ToLower()}.7z");
             if (FileManager.Pack.Hash != Pack.Hash)
@@ -121,21 +121,27 @@ namespace ModLauncher
 
         static void GetUpdate()
         {
-            DownloadFile(1);
+            if (File.Exists($"Cache/{Pack.Name.ToLower()}.7z"))
+                File.Delete($"Cache/{Pack.Name.ToLower()}.7z");
+
+            MainWindow.CurrentWindow.ChangeInstallStatus($"Downloading modpack: {Pack.DisplayName}...");
+            DownloadFile();
+            MainWindow.CurrentWindow.ChangeInstallStatus($"Extracting files...");
             FileManager.ModUpdate();
+            MainWindow.CurrentWindow.ChangeInstallStatus($"Modpack is updated!");
         }
 
-        static void DownloadFile(int index)
+        static void DownloadFile()
         {
-            string[] fileNames = { $"{Pack.Name.ToLower()}.7z", $"{Pack.Name.ToLower()}_update.7z" };
+            string fileNames = $"{Pack.Name.ToLower()}.7z";
 
-            if (File.Exists($"Cache/" + fileNames[index]))
+            if (File.Exists($"Cache/" + fileNames))
                 return;
 
             byte[] formatted = ReceiveData();
             while (formatted.Length != 0)
             {
-                using (var stream = new FileStream("Cache/" + fileNames[index], FileMode.Append))
+                using (var stream = new FileStream("Cache/" + fileNames, FileMode.Append))
                 {
                     stream.Write(formatted, 0, formatted.Length);
                 }

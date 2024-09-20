@@ -35,7 +35,7 @@ namespace ModLauncher
                 {
                     AvalVerLabel_BC.Content = FileServer.Pack.Version;
                     DescriptionLabel.Text = FileServer.Pack.Description;
-                    TitleLabel.Content = FileServer.Pack.Name;
+                    TitleLabel.Content = FileServer.Pack.DisplayName;
                     CurrVerLabel_BC.Content = FileManager.Pack.Version;
                     PatchBox_BC.Text = FileManager.Pack.Log;
                 });
@@ -57,7 +57,7 @@ namespace ModLauncher
 
         private void DeleteModpack()
         {
-            if (Directory.Exists($"Launcher/{FileManager.Pack.Name}"))
+            if (Directory.Exists($"Launcher/{FileManager.Pack.DisplayName}"))
             {
                 try
                 {
@@ -67,21 +67,21 @@ namespace ModLauncher
 
                     Dispatcher.Invoke(() =>
                     {
-                        MessageBox.Show($"{FileManager.Pack.Name} deleted!");
+                        MessageBox.Show($"{FileManager.Pack.DisplayName} deleted!");
                         CurrVerLabel_BC.Content = "No Version";
                         BC_ClientState(0);
                     });
                 } catch (Exception)
                 {
                     BC_ClientState(4);
-                    GetError($"Failed to delete {FileManager.Pack.Name}!");
+                    GetError($"Failed to delete {FileManager.Pack.DisplayName}!");
                 }
             }
             else
             {
                 GetError(
-                $"Failed to delete {FileManager.Pack.Name}!\n" +
-                    $"{FileManager.Pack.Name} doesn't exist.");
+                $"Failed to delete {FileManager.Pack.DisplayName}!\n" +
+                    $"{FileManager.Pack.DisplayName} doesn't exist.");
                 BC_ClientState(4);
             }
         }
@@ -175,7 +175,7 @@ namespace ModLauncher
                 AvalVerLabel_BC.Content = FileManager.Pack.Version;
                 PatchBox_BC.Text = FileManager.Pack.Log;
                 DescriptionLabel.Text = FileManager.Pack.Description;
-                TitleLabel.Content = FileManager.Pack.Name;
+                TitleLabel.Content = FileManager.Pack.DisplayName;
                 CurrVerLabel_BC.Content = FileManager.Pack.Version;
             });
         }
@@ -189,6 +189,7 @@ namespace ModLauncher
                     Dispatcher.Invoke(() =>
                     {
                         ProgressBar_BC.Visibility = Visibility.Visible;
+                        ProgressLabel.Visibility = Visibility.Visible;
                     });
                     BC_ClientState(3);
                     FileServer.Connect(2);
@@ -197,31 +198,33 @@ namespace ModLauncher
                     Dispatcher.Invoke(() =>
                     {
                         ProgressBar_BC.Visibility = Visibility.Hidden;
-                        MessageBox.Show($"{FileManager.Pack.Name} updated!");
+                        ProgressLabel.Visibility = Visibility.Hidden;
+                        MessageBox.Show($"{FileManager.Pack.DisplayName} updated!");
                     });
                 });
             } catch (Exception)
             {
-                File.Delete($"Cache/{FileManager.Pack.Name.ToLower()}_update.7z");
+                File.Delete($"Cache/{FileManager.Pack.Name.ToLower()}.7z");
 
                 Dispatcher.Invoke(() =>
                 {
                     ProgressBar_BC.Visibility = Visibility.Hidden;
+                    ProgressLabel.Visibility = Visibility.Hidden;
                 });
-                GetError($"Failed to update {FileManager.Pack.Name}!\n" +
+                GetError($"Failed to update {FileManager.Pack.DisplayName}!\n" +
                     "Check for internet connection and firewall.");
                 BC_ClientState(2);
             }
         }
 
-        private void BC_InstallGame()
+        private async void BC_InstallGame()
         {
             if (Directory.Exists($"Launcher/{FileManager.Pack.Name}"))
             {
                 Dispatcher.Invoke(() =>
                 {
                     StartBtn_BC.Content = "Spielen";
-                    MessageBox.Show($"{FileManager.Pack.Name} already installed!");
+                    MessageBox.Show($"{FileManager.Pack.DisplayName} already installed!");
                 });
                 BC_ClientState(4);
             }
@@ -229,7 +232,7 @@ namespace ModLauncher
             {
                 try
                 {
-                    Task.Run(() =>
+                    await Task.Run(() =>
                     {
                         Dispatcher.Invoke(() =>
                         {
@@ -244,7 +247,7 @@ namespace ModLauncher
                         {
                             ProgressBar_BC.Visibility = Visibility.Hidden;
                             ProgressLabel.Visibility = Visibility.Hidden;
-                            MessageBox.Show($"{FileServer.Pack.Name} installed!");
+                            MessageBox.Show($"{FileServer.Pack.DisplayName} installed!");
                         });
                     });
                     RefreshTab();
@@ -258,7 +261,7 @@ namespace ModLauncher
                         ProgressBar_BC.Visibility = Visibility.Hidden;
                         ProgressLabel.Visibility = Visibility.Hidden;
                     });
-                    GetError($"Failed to install {FileManager.Pack.Name}!\n" +
+                    GetError($"Failed to install {FileManager.Pack.DisplayName}!\n" +
                         "Check for internet connection and firewall.");
 
                     BC_ClientState(4);
@@ -281,7 +284,7 @@ namespace ModLauncher
 
                 Dispatcher.Invoke(() =>
                 {
-                    GetError($"Failed to start {FileManager.Pack.Name}!");
+                    GetError($"Failed to start {FileManager.Pack.DisplayName}!");
                 });
             }
         }
@@ -386,7 +389,7 @@ namespace ModLauncher
 
         private void Info_Btn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Created by NekoLogi\nLauncher version: 4.0.0");
+            MessageBox.Show("Created by NekoLogi\nLauncher version: 4.1.2");
         }
 
         private void Delete_Btn_Click(object sender, RoutedEventArgs e)
